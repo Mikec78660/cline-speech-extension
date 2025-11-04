@@ -13,17 +13,23 @@ async function makeRequest(options, data) {
     return new Promise((resolve, reject) => {
         const client = options.protocol === 'https:' ? https : http;
         const req = client.request(options, (res) => {
-            let responseData = '';
+            // Handle binary data properly - check if this is likely binary data
+            const chunks = [];
             res.on('data', (chunk) => {
-                responseData += chunk;
+                chunks.push(chunk);
             });
             res.on('end', () => {
+                // Combine all chunks into a single buffer
+                const buffer = Buffer.concat(chunks);
+                // Check if response is likely JSON or binary
                 try {
-                    const parsedData = JSON.parse(responseData);
+                    // If it's a valid JSON string, parse it
+                    const parsedData = JSON.parse(buffer.toString('utf8'));
                     resolve(parsedData);
                 }
                 catch (e) {
-                    resolve(responseData);
+                    // If it's not JSON, return the raw buffer (binary data)
+                    resolve(buffer);
                 }
             });
         });
@@ -178,23 +184,24 @@ function activate(context) {
                         response_format: 'wav'
                     }));
                     // Handle raw audio response from speaches server
-                    if (result && typeof result !== 'string') {
+                    // The speaches server returns raw audio bytes, not JSON
+                    if (result && typeof result === 'string' && result.length > 0) {
+                        // If result is a string but has content, it's likely raw audio data
+                        // In this case, we can't play it directly in VS Code, so we show success
+                        vscode.window.showInformationMessage('Text converted to speech successfully');
+                    }
+                    else {
                         // If we get a proper response (not just raw audio bytes)
-                        if (result.audio_url) {
+                        if (result && result.audio_url) {
                             // Play the audio file
                             const audioUri = vscode.Uri.parse(result.audio_url);
                             await vscode.env.openExternal(audioUri);
                             vscode.window.showInformationMessage('Text converted to speech and playing!');
                         }
                         else {
-                            // Server returned raw audio data, which is fine - we just need to handle it
+                            // Server returned raw audio data or no audio_url, which is expected
                             vscode.window.showInformationMessage('Text converted to speech successfully');
                         }
-                    }
-                    else {
-                        // The server returned raw audio data - this is expected behavior
-                        // The extension can't play raw audio directly, so we show success message
-                        vscode.window.showInformationMessage('Text converted to speech successfully');
                     }
                 }
                 catch (error) {
