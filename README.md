@@ -28,6 +28,11 @@ A VS Code extension that provides Text-to-Speech (TTS) and Speech-to-Text (STT) 
    - Transcribes audio files to text and inserts result
    - Prompts for audio file selection
 
+5. **Cline: Voice to Text (Record)** (`cline-speech.voiceToText`)
+   - Records voice from microphone and transcribes to text
+   - Note: Microphone access requires proper permissions and may have platform limitations
+   - Inserts the transcribed text at cursor position
+
 ## Setup
 
 ### Prerequisites

@@ -350,11 +350,44 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
+  // Voice recording and transcription command
+  const voiceToTextCommand = vscode.commands.registerCommand('cline-speech.voiceToText', async () => {
+    try {
+      // Show progress
+      const progress = await vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: "Recording and transcribing speech...",
+        cancellable: false
+      }, async () => {
+        try {
+          // This would normally involve actual microphone recording
+          // For now, we'll show a message about limitations
+          vscode.window.showInformationMessage('Voice recording feature requires additional implementation for microphone access.');
+          vscode.window.showInformationMessage('Please use the existing STT command to transcribe audio files.');
+          
+          // In a full implementation, this would:
+          // 1. Request microphone permission
+          // 2. Start recording audio
+          // 3. Save recording temporarily
+          // 4. Send to STT API
+          // 5. Insert result into editor
+        } catch (error) {
+          console.error('Voice to Text Error:', error);
+          vscode.window.showErrorMessage(`Voice to Text Error: ${error}`);
+        }
+      });
+    } catch (error) {
+      console.error('Voice to Text Command Error:', error);
+      vscode.window.showErrorMessage(`Voice to Text Command Error: ${error}`);
+    }
+  });
+
   // Add commands to context
   context.subscriptions.push(ttsCommand);
   context.subscriptions.push(sttCommand);
   context.subscriptions.push(ttsWithFileCommand);
   context.subscriptions.push(sttFromFileCommand);
+  context.subscriptions.push(voiceToTextCommand);
 }
 
 export function deactivate() {

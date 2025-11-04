@@ -33,6 +33,10 @@
       {
         "command": "cline-speech.sttFromFile",
         "title": "Cline: Speech to Text from File"
+      },
+      {
+        "command": "cline-speech.voiceToText",
+        "title": "Cline: Voice to Text (Record)"
       }
     ],
     "menus": {
