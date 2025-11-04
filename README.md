@@ -46,6 +46,14 @@ A VS Code extension that provides Text-to-Speech (TTS) and Speech-to-Text (STT) 
 
 2. Make sure the server is running on `http://speaches.lan:8000` (default)
 
+### Important Note about Server Compatibility
+
+The speaches-ai/speaches server is a Gradio web application and may not expose direct REST API endpoints that this extension expects. If you encounter "404 Not Found" errors, please verify that:
+
+- The server is properly running
+- You're using the correct version of the speaches server that supports the required API endpoints
+- The server is configured to expose the necessary TTS/STT endpoints
+
 ### Installation
 
 1. Install the extension in VS Code:

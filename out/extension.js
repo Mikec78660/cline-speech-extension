@@ -132,7 +132,13 @@ function activate(context) {
                         vscode.window.showInformationMessage('Text converted to speech and playing!');
                     }
                     else {
-                        vscode.window.showErrorMessage('Failed to convert text to speech');
+                        // Provide more detailed error information
+                        if (result && typeof result === 'string' && result.includes('404')) {
+                            vscode.window.showErrorMessage('Failed to convert text to speech: TTS endpoint not found. Please verify your speaches server is properly configured and exposes /tts endpoint.');
+                        }
+                        else {
+                            vscode.window.showErrorMessage('Failed to convert text to speech');
+                        }
                     }
                 }
                 catch (error) {
