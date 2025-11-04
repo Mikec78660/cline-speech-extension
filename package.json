@@ -3,6 +3,10 @@
   "displayName": "Cline Speech",
   "description": "Text-to-Speech and Speech-to-Text extension for Cline AI",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mikec78660/cline-speech-extension.git"
+  },
   "engines": {
     "vscode": "^1.70.0"
   },
