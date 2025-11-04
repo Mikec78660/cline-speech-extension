@@ -116,15 +116,25 @@ function activate(context) {
                     const options = {
                         hostname,
                         port,
-                        path: '/tts',
+                        path: '/v1/audio/speech',
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Content-Length': Buffer.byteLength(JSON.stringify({ text }))
+                            'Content-Length': Buffer.byteLength(JSON.stringify({
+                                input: text,
+                                model: 'tts-1',
+                                voice: 'alloy',
+                                response_format: 'wav'
+                            }))
                         },
                         protocol
                     };
-                    const result = await makeRequest(options, JSON.stringify({ text }));
+                    const result = await makeRequest(options, JSON.stringify({
+                        input: text,
+                        model: 'tts-1',
+                        voice: 'alloy',
+                        response_format: 'wav'
+                    }));
                     if (result && result.audio_url) {
                         // Play the audio file
                         const audioUri = vscode.Uri.parse(result.audio_url);

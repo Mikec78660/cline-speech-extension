@@ -81,8 +81,25 @@ Default endpoint: `http://speaches.lan:8000`
 ## API Endpoints
 
 The extension communicates with the speaches server using these endpoints:
-- `POST /tts` - Text to Speech conversion
+- `POST /v1/audio/speech` - Text to Speech conversion (with proper JSON payload)
 - `POST /stt` - Speech to Text conversion
+
+### Text to Speech API Format
+
+The speaches server expects a specific JSON format for TTS requests:
+```json
+{
+  "input": "Hello World!",
+  "model": "tts-1",
+  "voice": "alloy",
+  "response_format": "wav",
+  "speed": 1.0
+}
+```
+
+### Speech to Text API Format
+
+For STT, the extension sends base64-encoded audio data to the `/stt` endpoint.
 
 ## Contributing
 
