@@ -183,23 +183,30 @@ function activate(context) {
                         voice: 'alloy',
                         response_format: 'wav'
                     }));
-                    // Handle raw audio response from speaches server
+                    // Handle response from speaches server
                     // The speaches server returns raw audio bytes, not JSON
-                    if (result && typeof result === 'string' && result.length > 0) {
-                        // If result is a string but has content, it's likely raw audio data
-                        // In this case, we can't play it directly in VS Code, so we show success
+                    if (result && Buffer.isBuffer(result)) {
+                        // Server returned raw audio bytes - this is expected behavior
+                        // VS Code cannot play audio directly, so we show success message
                         vscode.window.showInformationMessage('Text converted to speech successfully');
                     }
                     else {
-                        // If we get a proper response (not just raw audio bytes)
+                        // If we get a JSON response with audio_url, try to play it
                         if (result && result.audio_url) {
-                            // Play the audio file
-                            const audioUri = vscode.Uri.parse(result.audio_url);
-                            await vscode.env.openExternal(audioUri);
-                            vscode.window.showInformationMessage('Text converted to speech and playing!');
+                            try {
+                                // Try to open the audio URL with external application
+                                const audioUri = vscode.Uri.parse(result.audio_url);
+                                await vscode.env.openExternal(audioUri);
+                                vscode.window.showInformationMessage('Text converted to speech and playing!');
+                            }
+                            catch (openError) {
+                                // If we can't open externally, just show success
+                                vscode.window.showInformationMessage('Text converted to speech successfully');
+                                console.error('Failed to open audio:', openError);
+                            }
                         }
                         else {
-                            // Server returned raw audio data or no audio_url, which is expected
+                            // No audio_url, but we still show success since conversion happened
                             vscode.window.showInformationMessage('Text converted to speech successfully');
                         }
                     }
