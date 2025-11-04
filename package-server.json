@@ -1,0 +1,18 @@
+{
+  "name": "speaches-server",
+  "version": "1.0.0",
+  "description": "Server setup instructions for speaches-ai/speaches",
+  "main": "SERVER_SETUP.md",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "speech",
+    "tts",
+    "stt",
+    "ai",
+    "server"
+  ],
+  "author": "Cline AI",
+  "license": "MIT"
+}
