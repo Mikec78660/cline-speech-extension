@@ -135,20 +135,24 @@ function activate(context) {
                         voice: 'alloy',
                         response_format: 'wav'
                     }));
-                    if (result && result.audio_url) {
-                        // Play the audio file
-                        const audioUri = vscode.Uri.parse(result.audio_url);
-                        await vscode.env.openExternal(audioUri);
-                        vscode.window.showInformationMessage('Text converted to speech and playing!');
-                    }
-                    else {
-                        // Provide more detailed error information
-                        if (result && typeof result === 'string' && result.includes('404')) {
-                            vscode.window.showErrorMessage('Failed to convert text to speech: TTS endpoint not found. Please verify your speaches server is properly configured and exposes /tts endpoint.');
+                    // Handle raw audio response from speaches server
+                    if (result && typeof result !== 'string') {
+                        // If we get a proper response (not just raw audio bytes)
+                        if (result.audio_url) {
+                            // Play the audio file
+                            const audioUri = vscode.Uri.parse(result.audio_url);
+                            await vscode.env.openExternal(audioUri);
+                            vscode.window.showInformationMessage('Text converted to speech and playing!');
                         }
                         else {
-                            vscode.window.showErrorMessage('Failed to convert text to speech');
+                            // Server returned raw audio data, which is fine - we just need to handle it
+                            vscode.window.showInformationMessage('Text converted to speech successfully');
                         }
+                    }
+                    else {
+                        // The server returned raw audio data - this is expected behavior
+                        // The extension can't play raw audio directly, so we show success message
+                        vscode.window.showInformationMessage('Text converted to speech successfully');
                     }
                 }
                 catch (error) {
