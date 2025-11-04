@@ -188,7 +188,10 @@ function activate(context) {
                     if (result && Buffer.isBuffer(result)) {
                         // Server returned raw audio bytes - this is expected behavior
                         // VS Code cannot play audio directly, so we show success message
+                        // For now, we'll show success but note that audio is generated
                         vscode.window.showInformationMessage('Text converted to speech successfully');
+                        // Note: Audio files are generated but cannot be played directly in VS Code
+                        // Users can manually open the generated files with external players
                     }
                     else {
                         // If we get a JSON response with audio_url, try to play it
