@@ -335,7 +335,21 @@ function activate(context) {
                         vscode.window.showInformationMessage(`Text converted to speech and saved to ${audioFilePath}`);
                     }
                     else {
-                        vscode.window.showErrorMessage('Failed to convert text to speech');
+                        // The speaches server returns raw audio data for file output
+                        // We need to save this raw audio data to a file
+                        if (result && Buffer.isBuffer(result)) {
+                            try {
+                                fs.writeFileSync(audioFilePath, result);
+                                vscode.window.showInformationMessage(`Text converted to speech and saved to ${audioFilePath}`);
+                            }
+                            catch (writeError) {
+                                console.error('Failed to write audio file:', writeError);
+                                vscode.window.showErrorMessage(`Failed to save audio file: ${writeError}`);
+                            }
+                        }
+                        else {
+                            vscode.window.showErrorMessage('Failed to convert text to speech');
+                        }
                     }
                 }
                 catch (error) {
