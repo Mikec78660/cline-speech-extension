@@ -238,7 +238,7 @@ export function activate(context: vscode.ExtensionContext) {
           const options: https.RequestOptions = {
             hostname,
             port,
-            path: '/stt',
+            path: '/v1/audio/transcriptions',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -321,11 +321,16 @@ export function activate(context: vscode.ExtensionContext) {
           const options: https.RequestOptions = {
             hostname,
             port,
-            path: '/tts',
+            path: '/v1/audio/speech',
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Content-Length': Buffer.byteLength(JSON.stringify({ text, output_file: fileName }))
+              'Content-Length': Buffer.byteLength(JSON.stringify({ 
+                input: text,
+                model: 'tts-1',
+                voice: 'alloy',
+                response_format: 'wav'
+              }))
             },
             protocol
           };
@@ -373,7 +378,7 @@ export function activate(context: vscode.ExtensionContext) {
             const options: https.RequestOptions = {
               hostname,
               port,
-              path: '/stt',
+              path: '/v1/audio/transcriptions',
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'

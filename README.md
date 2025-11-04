@@ -90,7 +90,7 @@ The extension supports optional task completion audio alerts:
 
 The extension communicates with the speaches server using these endpoints:
 - `POST /v1/audio/speech` - Text to Speech conversion (with proper JSON payload)
-- `POST /stt` - Speech to Text conversion
+- `POST /v1/audio/transcriptions` - Speech to Text conversion
 
 ### Text to Speech API Format
 
@@ -107,7 +107,7 @@ The speaches server expects a specific JSON format for TTS requests:
 
 ### Speech to Text API Format
 
-For STT, the extension sends base64-encoded audio data to the `/stt` endpoint.
+For STT, the extension sends base64-encoded audio data to the `/v1/audio/transcriptions` endpoint.
 
 ## Contributing
 

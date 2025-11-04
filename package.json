@@ -1,7 +1,7 @@
 {
   "name": "cline-speech",
-  "displayName": "Cline Speech",
-  "description": "Text-to-Speech and Speech-to-Text extension for Cline AI",
+  "displayName": "Cline Speech Extension",
+  "description": "Text-to-Speech and Speech-to-Text extension for Cline AI using speaches-ai/speaches server",
   "version": "0.0.1",
   "repository": {
     "type": "git",
