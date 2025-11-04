@@ -330,7 +330,12 @@ function activate(context) {
                         },
                         protocol
                     };
-                    const result = await makeRequest(options, JSON.stringify({ text, output_file: fileName }));
+                    const result = await makeRequest(options, JSON.stringify({
+                        input: text,
+                        model: 'tts-1',
+                        voice: 'alloy',
+                        response_format: 'wav'
+                    }));
                     if (result && result.audio_url) {
                         vscode.window.showInformationMessage(`Text converted to speech and saved to ${audioFilePath}`);
                     }

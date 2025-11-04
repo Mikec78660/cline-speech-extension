@@ -315,6 +315,8 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      console.log('TTS with file command called with text:', text); // Debug log
+
       const apiEndpoint = getApiEndpoint();
       const { hostname, port, protocol } = getApiUrlParts(apiEndpoint);
 
@@ -328,6 +330,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       const audioFilePath = getAudioFilePath(fileName);
+      console.log('Audio file path:', audioFilePath); // Debug log
       
       const progress = await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification,
@@ -352,12 +355,16 @@ export function activate(context: vscode.ExtensionContext) {
             protocol
           };
 
+          console.log('Making request to:', options); // Debug log
+          
           const result = await makeRequest(options, JSON.stringify({ 
             input: text,
             model: 'tts-1',
             voice: 'alloy',
             response_format: 'wav'
           }));
+          
+          console.log('API Response received:', typeof result, result ? (Buffer.isBuffer(result) ? 'Buffer of length ' + result.length : 'JSON response') : 'No result'); // Debug log
           
           if (result && result.audio_url) {
             vscode.window.showInformationMessage(`Text converted to speech and saved to ${audioFilePath}`);
@@ -366,6 +373,7 @@ export function activate(context: vscode.ExtensionContext) {
             // We need to save this raw audio data to a file
             if (result && Buffer.isBuffer(result)) {
               try {
+                console.log('Writing buffer of length', result.length, 'to file'); // Debug log
                 fs.writeFileSync(audioFilePath, result);
                 vscode.window.showInformationMessage(`Text converted to speech and saved to ${audioFilePath}`);
               } catch (writeError) {
