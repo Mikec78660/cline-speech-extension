@@ -63,6 +63,11 @@
           "type": "string",
           "default": "http://speaches.lan:8000",
           "description": "The API endpoint for the speaches server"
+        },
+        "clineSpeech.taskCompletionAlert": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable task completion audio alerts"
         }
       }
     }

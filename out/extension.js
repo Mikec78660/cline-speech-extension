@@ -74,6 +74,48 @@ function activate(context) {
         const endpoint = config.get('apiEndpoint', DEFAULT_SPEECHES_API_BASE_URL);
         return endpoint;
     }
+    // Check if task completion alert is enabled
+    function isTaskCompletionAlertEnabled() {
+        const config = vscode.workspace.getConfiguration('clineSpeech');
+        const enabled = config.get('taskCompletionAlert', false);
+        return enabled;
+    }
+    // Send task completion alert
+    async function sendTaskCompletionAlert() {
+        try {
+            const apiEndpoint = getApiEndpoint();
+            const { hostname, port, protocol } = getApiUrlParts(apiEndpoint);
+            // Only send alert if enabled
+            if (isTaskCompletionAlertEnabled()) {
+                const options = {
+                    hostname,
+                    port,
+                    path: '/v1/audio/speech',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': Buffer.byteLength(JSON.stringify({
+                            input: 'Task Completed',
+                            model: 'tts-1',
+                            voice: 'alloy',
+                            response_format: 'wav'
+                        }))
+                    },
+                    protocol
+                };
+                await makeRequest(options, JSON.stringify({
+                    input: 'Task Completed',
+                    model: 'tts-1',
+                    voice: 'alloy',
+                    response_format: 'wav'
+                }));
+            }
+        }
+        catch (error) {
+            console.error('Task completion alert error:', error);
+            // Don't show error to user for this optional feature
+        }
+    }
     // Helper function to get API URL parts
     function getApiUrlParts(endpoint) {
         try {

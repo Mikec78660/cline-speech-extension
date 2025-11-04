@@ -72,6 +72,14 @@ The extension can be configured through VS Code settings:
 
 Default endpoint: `http://speaches.lan:8000`
 
+### Task Completion Alerts
+
+The extension supports optional task completion audio alerts:
+
+1. Enable the "Cline Speech: Task Completion Alert" setting
+2. When enabled, the extension will play an audio notification saying "Task Completed" after successful operations
+3. This provides audible feedback when tasks are completed by Cline
+
 ## Usage
 
 1. Select text in your editor or copy text to clipboard
